@@ -9,6 +9,8 @@
 import UIKit
 import SpriteKit
 import ARKit
+import GameplayKit
+
 
 class ViewController: UIViewController, ARSKViewDelegate {
     
@@ -42,7 +44,9 @@ class ViewController: UIViewController, ARSKViewDelegate {
         //Basico ARSessionConfiguration() = 3 Grados de libertad para rotar
         /*El ARWorldTrackingConfiguration() = 6 grados de libertad:
         3 para rotar y 3 para movimiento o translacion*/
-        let configuration = ARWorldTrackingConfiguration()
+        
+        let configuration = ARSessionConfiguration()
+        //let configuration = ARWorldTrackingConfiguration()
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -64,10 +68,19 @@ class ViewController: UIViewController, ARSKViewDelegate {
     //Se encarga de posicionar el elemento en la vista
     func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode? {
         // Create and configure a node for the anchor added to the view's session.
+        
+        let random = GKRandomSource.sharedRandom()
+        //sera un numero entre 1 2 3 4
+        //regresa un entero sin signo, de 0 al numero que se undica el upperBound sin tocarlo
+        let pokemonId = random.nextInt(upperBound: 4) + 1
+        return SKSpriteNode(imageNamed: "pokemon\(pokemonId)")
+        
+        /*
         let labelNode = SKLabelNode(text: "👾")
         labelNode.horizontalAlignmentMode = .center
         labelNode.verticalAlignmentMode = .center
         return labelNode;
+         */
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
