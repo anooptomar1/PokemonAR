@@ -17,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		89CD55DF1F6AAEAB00C88455 /* QuickDeath.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = QuickDeath.mp3; sourceTree = "<group>"; };
 		89E69D971F680A75007F5945 /* PokemonAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokemonAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89E69D9A1F680A75007F5945 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89E69D9C1F680A76007F5945 /* Scene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Scene.sks; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		89E69D991F680A75007F5945 /* PokemonAR */ = {
 			isa = PBXGroup;
 			children = (
+				89CD55DF1F6AAEAB00C88455 /* QuickDeath.mp3 */,
 				89E69D9A1F680A75007F5945 /* AppDelegate.swift */,
 				89E69D9C1F680A76007F5945 /* Scene.sks */,
 				89E69D9E1F680A76007F5945 /* Scene.swift */,

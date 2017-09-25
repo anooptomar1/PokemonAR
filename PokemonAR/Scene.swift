@@ -21,6 +21,11 @@ class Scene: SKScene {
             self.remainingLabel.text = "Faltan: \(targetCount)"
         }
     }
+    //Para llamar el sonido cuando se muere un pokemon
+    //el waitForComletion: es para hacer que el audio se pueda ejecutar dos o mas veces a la vez
+    //o esperar que uno termine para que se haga la siguiente reproduccion, en este casso
+    //se pondra false porque si queremos que se ejecuten varios simultaneamente
+    let deathSound = SKAction.playSoundFileNamed("QuickDeath", waitForCompletion: false)
     //Nos regresa el date
     let startTime = Date()
     
@@ -89,15 +94,49 @@ class Scene: SKScene {
         //El reto es eobtener una coordenada 2D a partir de un plano 3D (La pantalla y los graficos)
         //Localizar le primer toque del conjunto de toques
         //Mirar si el toque cae dentro de nuestra vista de AR
+        //guard es una sentencia de control como if pero siemrpe con elese
         guard let touch = touches.first else {return}
+        //localizacion del toque
+        let location = touch.location(in:self)
+        print("El toque ha sido en: (\(location.x), \(location.y)")
         
         //Buscar todos los nodos que han sido tocados por ese toque de usuario
+        let hit = nodes(at: location)
         
         //Cogeremos el primer sprite del array que nos devuelve el metodo anterior (si lo hay)
         //y animaremos ese pokemon hasta hacerlo desaparecer
+        //Si hay primer objeto (significado de sentencia)
+        if let sprite = hit.first{
+            //Para animarlo hasta hacerlo desaparecer
+            //Animacion, lo escalara al doble (el 2) de su tamaño con una animacion de 0.4 s
+            let scaleOut = SKAction.scale(to: 2, duration: 0.4)
+            //Para que desaparesca desvaneciendoce
+            let fadeOut = SKAction.fadeOut(withDuration: 0.4)
+            
+            //Remueve el nodo de la pantalla, crea una accion que elimina el nodo de la pantalla
+            let remove = SKAction.removeFromParent()
+            
+            //Para que las haga las dos animaciones al mismo tiempo
+            //El death Sound es el sonido de muerte :D
+            let groupAction = SKAction.group([scaleOut, fadeOut, deathSound])
+            
+            //Eliminamos el nodo de lapantalla ya que desaparecio el pokemn, se ejecutan una tras otra
+            //Primero ejecuta la agrupacion que es escalar mas fadeout y despues los desaparece de la pantalla
+            let sequenceAction = SKAction.sequence([groupAction,remove])
+            
+            //Corremos la sequencia
+            sprite.run(sequenceAction)
+            //actualizaremos que hay un pokemos menos con la variable target count
+            targetCount -= 1
+            
+            //Se llama al metodo para visualizar el eltrero de gameover
+            if targetsCreated == 25 && targetCount == 0 {
+                gameOver()
+            }
+            
+        }
         
         
-        //actualizaremos que hay un pokemos menos con la variable target count
         
         
         
@@ -196,4 +235,35 @@ class Scene: SKScene {
         
         
     }
+    
+    
+    
+    func gameOver() {
+        
+        //Ocultar la remainingLabel
+        remainingLabel.removeFromParent()
+        
+        //Crear una nueva imagen con la foto de game over
+        let gameOver = SKSpriteNode(imageNamed: "gameover")
+        //Se añade a la pantalla
+        addChild(gameOver)
+        
+        //Calcular cuanro le ha llevado al usuario cazar a todos los pokemon
+        let timeTaken = Date().timeIntervalSince(startTime)
+        
+        //Mostrar ese tiempo que le ha llevado en pantalla en una etiqueta nueva
+        let timeTakenLabel = SKLabelNode(text: "Te ha llevado: \(Int(timeTaken)) segundos")
+        timeTakenLabel.fontSize = 40
+        timeTakenLabel.color = .white
+        //El view es opcional pero le colocamos ! porque estamos seguros de que exite la vista
+        //Mover posiciones de X y Y para que aparesca el letrero
+        timeTakenLabel.position = CGPoint(x: view!.frame.maxX - 50, y: -view!.frame.midY + 50)
+        
+        //Se añadel el label a la pantalla
+        addChild(timeTakenLabel)
+    }
+    
+    
+    
+    
 }
